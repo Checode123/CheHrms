@@ -33,10 +33,18 @@ import bcrypt from "bcrypt";
 
 export const registerStudent = async (req, res) => {
   try {
-    const { user_id, name, email, mobile, password, confirmPassword , role} =
+    const { user_id, name, email, mobile, password, confirmPassword, role } =
       req.body;
 
-    if (!user_id || !name || !email || !mobile || !password || !confirmPassword || !role) {
+    if (
+      !user_id ||
+      !name ||
+      !email ||
+      !mobile ||
+      !password ||
+      !confirmPassword ||
+      !role
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -60,9 +68,15 @@ export const registerStudent = async (req, res) => {
       ])
       .select(); // this fetches the newly inserted row
 
-    console.log("Status:", status);  //debug
+    console.log("Status:", status); //debug
     console.log("Data:", data); //debug
     console.log("Error:", error); //debug
+
+    if (error) {
+      console.log(error);
+
+      return res.status(404).json({ message: "there is an error" });
+    }
 
     res.status(201).json({ message: "Student registered successfully", data });
   } catch (err) {
@@ -73,39 +87,37 @@ export const registerStudent = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
 export const loginUser = async (req, res) => {
   const { user_id, password } = req.body;
 
   if (!user_id || !password) {
-    return res.status(400).json({ message: 'user_id and password are required' });
+    return res
+      .status(400)
+      .json({ message: "user_id and password are required" });
   }
 
   const { data: user, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('user_id', user_id)
+    .from("users")
+    .select("*")
+    .eq("user_id", user_id)
     .single();
 
   if (error) {
-    return res.status(404).json({ message: 'there is an error' });
+    console.log(error);
+
+    return res.status(404).json({ message: "there is an error" });
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password_hash);
 
   if (!user || !isPasswordValid) {
-    return res.status(401).json({ message: 'Invalid user_id or password' });
+    return res.status(401).json({ message: "Invalid user_id or password" });
   }
 
   //  generate a session token here using JWT
 
   return res.status(200).json({
-    message: 'Login successful',
+    message: "Login successful",
     user: {
       user_id: user.user_id,
       name: user.name,
