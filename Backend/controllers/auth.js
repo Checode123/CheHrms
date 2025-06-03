@@ -33,18 +33,10 @@ import bcrypt from "bcrypt";
 
 export const registerStudent = async (req, res) => {
   try {
-    const { user_id, name, email, mobile, password, confirmPassword, role } =
+    const { user_id, name, email, mobile, password, confirmPassword , role} =
       req.body;
 
-    if (
-      !user_id ||
-      !name ||
-      !email ||
-      !mobile ||
-      !password ||
-      !confirmPassword ||
-      !role
-    ) {
+    if (!user_id || !name || !email || !mobile || !password || !confirmPassword || !role) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
