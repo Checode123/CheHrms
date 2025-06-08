@@ -1,4 +1,4 @@
-import supabase from "../config/supabaseClient.js";
+import supabase from "../config/SupabaseClient.js";
 
 export const addNotice = async (req, res) => {
   try {
