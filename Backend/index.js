@@ -8,8 +8,10 @@ import wardenRoutes from './routes/wardenRoutes.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001'], // allow multiple ports
+  credentials: true // if you're using cookies or tokens
 }));
+
 
 app.use(express.json());
 app.use('/api/auth', authRoutes);
