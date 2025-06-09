@@ -4,18 +4,18 @@ import { Clock, Volume2, Eye, Cigarette, RotateCcw, Trash2, ChevronRight, Menu, 
 import './Home.css';
 
 // Import images
-import srccImage from '../images/Home/heroImage.jpg';
-import mirandaImage from '../images/Home/miranda.jpg';
-import stephensImage from '../images/Home/stephens.jpg';
-import lsrImage from '../images/Home/lsr.jpg';
-import hinduImage from '../images/Home/hindu.jpg';
-import hansrajImage from '../images/Home/hansraj.jpg';
-import gargiImage from '../images/Home/gargi.jpg';
-import ramjasImage from '../images/Home/ramjas.jpg';
-import kmcImage from '../images/Home/kmc.jpg';
-import jmcImage from '../images/Home/jmc.jpg';
-import heroBackgroundImage from '../images/Home/heroImage.jpg';
-import messImage from '../images/Home/mess.jpg';
+import srccImage from './images/Home/heroImage.jpg';
+import mirandaImage from './images/Home/miranda.jpg';
+import stephensImage from './images/Home/stephens.jpg';
+import lsrImage from './images/Home/lsr.jpg';
+import hinduImage from './images/Home/hindu.jpg';
+import hansrajImage from './images/Home/hansraj.jpg';
+import gargiImage from './images/Home/gargi.jpg';
+import ramjasImage from './images/Home/ramjas.jpg';
+import kmcImage from './images/Home/kmc.jpg';
+import jmcImage from './images/Home/jmc.jpg';
+import heroBackgroundImage from './images/Home/heroImage.jpg';
+import messImage from './images/Home/mess.jpg';
 
 const HomeIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
