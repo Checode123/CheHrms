@@ -11,6 +11,8 @@ import {
   getAllNotices,
 } from "../controllers/notice.js";
 
+import { markAttendance , viewAttendance} from "../controllers/attendance.js";
+
 const router = express.Router();
 
 router.get("/allotments", getAllAllotments);
@@ -20,5 +22,10 @@ router.get('/students', getAllStudents); // 🆕 New route
 router.post("/notices", addNotice);
 router.delete("/notices/:id", deleteNotice);
 router.get("/notices", getAllNotices);
+
+// attendance
+router.post("/attendance", markAttendance);
+// fro veiwing particular studet's attendance
+router.get("/attendance/:student_id", viewAttendance);
 
 export default router;
