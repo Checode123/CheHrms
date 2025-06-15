@@ -3,7 +3,7 @@ import supabase from "../config/SupabaseClient.js";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
-
+import { sendEmailWithAttachment } from "../utils/emailSender.js";
 
 
 //To fetch all allotments from the DB
@@ -77,11 +77,12 @@ export const getAllStudents = async (req, res) => {
 
 
 // Generate PDF Allotment Letter
+
 export const generateAllotmentPDF = async (req, res) => {
   const { student_id } = req.params;
 
   try {
-    // Get allotment(s)
+    // Get allotment
     const { data: allotments, error: allotmentError } = await supabase
       .from("hostelallotments")
       .select("*")
@@ -96,7 +97,7 @@ export const generateAllotmentPDF = async (req, res) => {
 
     const allotment = allotments[0];
 
-    // Get student info (FIXED: removed .single())
+    // Get student info
     const { data: students, error: studentError } = await supabase
       .from("users")
       .select("name, email")
@@ -112,6 +113,7 @@ export const generateAllotmentPDF = async (req, res) => {
 
     const student = students[0];
 
+    // PDF generation
     const fileName = `${student_id}_allotment_letter.pdf`;
     const filePath = path.join("pdfs", fileName);
     if (!fs.existsSync("pdfs")) fs.mkdirSync("pdfs");
@@ -134,11 +136,26 @@ export const generateAllotmentPDF = async (req, res) => {
     doc.text(`Warden Signature: ______________________`);
     doc.end();
 
-    writeStream.on("finish", () => {
-      return res.status(200).json({
-        message: "PDF generated successfully",
-        url: `/pdfs/${fileName}`,
-      });
+writeStream.on("finish", async () => {
+  console.log("PDF generation completed for:", student.email);
+      try {
+        await sendEmailWithAttachment(
+          student.email,
+          "Your Hostel Allotment Letter",
+          `Hello ${student.name},\n\nPlease find your hostel allotment letter attached.\n\nRegards,\nHostel Management`,
+          filePath
+        );
+
+        return res.status(200).json({
+          message: "PDF generated and email sent successfully",
+          url: `/pdfs/${fileName}`,
+        });
+      } catch (emailErr) {
+        return res.status(500).json({
+          message: "PDF generated, but failed to send email",
+          error: emailErr.message,
+        });
+      }
     });
   } catch (err) {
     return res.status(500).json({ error: "Server error", details: err.message });
