@@ -5,6 +5,10 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import wardenRoutes from './routes/wardenRoutes.js';
 import studentRoute from './routes/studentRoute.js';
+import path from "path";
+
+
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +22,10 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/warden', wardenRoutes);
 app.use('/api/student', studentRoute);
+
+const __dirname = path.resolve();
+app.use("/pdfs", express.static(path.join(__dirname, "pdfs")));
+
 
 app.get('/', (req, res) => {
   res.send('Hello from backend!');

@@ -1,8 +1,10 @@
 import express from "express";
+
 import {
   getAllAllotments,
   getStudentAllotment,
   getAllStudents,
+  generateAllotmentPDF,
 } from "../controllers/warden.js";
 
 import {
@@ -33,4 +35,10 @@ router.get("/attendance/:student_id", viewAttendance);
 
 router.get("/feedbacks", getAllFeedbacks);
 router.patch("/feedbacks/:id", updateFeedbackStatus);
+
+router.get("/allotment-pdf/:student_id", generateAllotmentPDF);
+
+
+
+
 export default router;
