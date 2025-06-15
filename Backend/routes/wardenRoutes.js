@@ -12,6 +12,7 @@ import {
 } from "../controllers/notice.js";
 
 import { markAttendance , viewAttendance} from "../controllers/attendance.js";
+import { getAllFeedbacks, updateFeedbackStatus } from "../controllers/feedback.js";
 
 const router = express.Router();
 
@@ -28,4 +29,8 @@ router.post("/attendance", markAttendance);
 // fro veiwing particular studet's attendance
 router.get("/attendance/:student_id", viewAttendance);
 
+
+
+router.get("/feedbacks", getAllFeedbacks);
+router.patch("/feedbacks/:id", updateFeedbackStatus);
 export default router;
