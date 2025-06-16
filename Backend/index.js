@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import wardenRoutes from './routes/wardenRoutes.js';
 import studentRoute from './routes/studentRoute.js';
+import hostelRoutes from './routes/hostelRoutes.js';
 import path from "path";
 
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/warden', wardenRoutes);
 app.use('/api/student', studentRoute);
+app.use('/api/hostel', hostelRoutes);
 
 const __dirname = path.resolve();
 app.use("/pdfs", express.static(path.join(__dirname, "pdfs")));
