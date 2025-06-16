@@ -1,4 +1,6 @@
 import supabase from "../config/SupabaseClient.js";
+import jwt from 'jsonwebtoken'; 
+import bcrypt from "bcrypt";
 
 // export const registerStudent = async (req, res) => {
 //   const { student_id, name, email, mobile,role, password, confirmPassword } = req.body
@@ -28,8 +30,6 @@ import supabase from "../config/SupabaseClient.js";
 // //     res.status(500).json({ error: 'Failed to send OTP' })
 // //   }
 // }
-
-import bcrypt from "bcrypt";
 
 export const registerStudent = async (req, res) => {
   try {
@@ -83,9 +83,7 @@ export const loginUser = async (req, res) => {
   const { user_id, password } = req.body;
 
   if (!user_id || !password) {
-    return res
-      .status(400)
-      .json({ message: "user_id and password are required" });
+    return res.status(400).json({ message: "user_id and password are required" });
   }
 
   const { data: user, error } = await supabase
@@ -96,7 +94,6 @@ export const loginUser = async (req, res) => {
 
   if (error) {
     console.log(error);
-
     return res.status(404).json({ message: "there is an error" });
   }
 
@@ -106,10 +103,19 @@ export const loginUser = async (req, res) => {
     return res.status(401).json({ message: "Invalid user_id or password" });
   }
 
-  //  generate a session token here using JWT
+  // ✅ Generate JWT token here
+  const token = jwt.sign(
+    {
+      id: user.user_id,
+      role: user.role
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '1d' }
+  );
 
   return res.status(200).json({
     message: "Login successful",
+    token, // ✅ Include token in response
     user: {
       user_id: user.user_id,
       name: user.name,
@@ -118,3 +124,4 @@ export const loginUser = async (req, res) => {
     },
   });
 };
+

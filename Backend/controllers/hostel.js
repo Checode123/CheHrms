@@ -71,3 +71,59 @@ export const updateApplicationStatus = async (req, res) => {
       .json({ error: "Server error", details: err.message });
   }
 };
+
+export const withdrawApplication = async (req, res) => {
+  const { student_id } = req.params;
+  try {
+    const { error } = await supabase
+      .from("hostelapplications")
+      .delete()
+      .eq("student_id", student_id);
+
+    if (error) throw error;
+
+    res.status(200).json({ message: "Application withdrawn successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Failed to withdraw application", details: error });
+  }
+};
+
+export const viewApplicationStatus = async (req, res) => {
+  const { student_id } = req.params;
+  try {
+    const { data, error } = await supabase
+      .from("hostelapplications")
+      .select("student_id, status, applied_on") // only existing columns
+      .eq("student_id", student_id);
+
+    if (error || !data || data.length === 0) throw error;
+
+    res.status(200).json({ student_id, applications: data });
+  } catch (error) {
+    res.status(404).json({ error: "Application not found", details: error });
+  }
+};
+
+export const listAllHostels = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('hostels')
+      .select('hostel_id, name, type, total_capacity, current_occupancy');
+
+    if (error) throw error;
+
+    const availableHostels = data.map(hostel => ({
+      ...hostel,
+      available_seats: hostel.total_capacity - hostel.current_occupancy
+    }));
+
+    res.status(200).json({ hostels: availableHostels });
+  } catch (err) {
+    res.status(500).json({
+      error: 'Failed to fetch hostels',
+      details: err.message,
+    });
+  }
+};
